@@ -30,4 +30,4 @@ This operation is traversing each node in the list and displaying its content.
 
 ## Searching 
 
-The we can also search for the node by passing the value to be searched. The given implementation only searches for the values for the single first match. If there are multiple same values in the list, this search only returns the first matching value.
+The we can also search for the node by passing the value to be searched. The given implementation returns true if the value to be searched is present in the node, else it returns false.

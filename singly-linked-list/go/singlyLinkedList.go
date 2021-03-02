@@ -48,6 +48,21 @@ func (node *Node) appendNode(value int) {
 	}
 }
 
+// Adds the node after the given position
+func (node *Node) addInMiddle(value int, position int) {
+	currentPos := 1
+	for node.Next != nil {
+		if position == currentPos {
+			var newNode Node
+			newNode.Value = value
+			newNode.Next = node.Next
+			node.Next = &newNode
+		}
+		currentPos++
+		node = node.Next
+	}
+}
+
 // Travel to each and every node and print its value
 func (node *Node) traverse() {
 	if node == nil {
@@ -88,21 +103,6 @@ func (node *Node) listLength() int {
 	return size
 }
 
-// Adds the node after the given position
-func (node *Node) addInMiddle(value int, position int) {
-	currentPos := 1
-	for node.Next != nil {
-		if position == currentPos {
-			var newNode Node
-			newNode.Value = value
-			newNode.Next = node.Next
-			node.Next = &newNode
-		}
-		currentPos++
-		node = node.Next
-	}
-}
-
 // Delete node At any given position
 func (node *Node) deleteNode(position int) {
 
@@ -112,27 +112,42 @@ func (node *Node) deleteNode(position int) {
 	} else if position > node.listLength() { // if the given position is greater than the list size, no element can be deleted
 		fmt.Println("Position more than list size.")
 	} else if position == 1 { // if the node to delete is first node or the head node
-		head = node.Next
+		node.deleteHeadNode()
 	} else if position == node.listLength() { // if the node to delete is the last node i.e. position is the size of list
-		for node != nil {
-			if node.Next.Next == nil {
-				node.Next = nil
-			}
-			node = node.Next
-		}
+		node.deleteTailNode()
 	} else { // if the position of the node to delete is in between first and last node in the list
-		preNode := node
-		count := 1
-		for node != nil {
-			if count == position {
-				node = preNode
-				node.Next = node.Next.Next
-				break
-			}
-			count++
-			preNode = node
-			node = node.Next
+		node.deleteNodeInMiddle(position)
+	}
+}
+
+// Delete the head node
+func (node *Node) deleteHeadNode() {
+	head = node.Next
+}
+
+// Delete the tail node
+func (node *Node) deleteTailNode() {
+	for node != nil {
+		if node.Next.Next == nil {
+			node.Next = nil
 		}
+		node = node.Next
+	}
+}
+
+// Delete the node in the middle by the given position
+func (node *Node) deleteNodeInMiddle(position int) {
+	preNode := node
+	count := 1
+	for node != nil {
+		if count == position {
+			node = preNode
+			node.Next = node.Next.Next
+			break
+		}
+		count++
+		preNode = node
+		node = node.Next
 	}
 }
 
@@ -151,7 +166,9 @@ func main() {
 
 	head.traverse()
 
-	head.deleteNode(3)
+	head.deleteNode(2)
 
 	head.traverse()
+
+	fmt.Println(head.searchItem(6))
 }
